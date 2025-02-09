@@ -18,6 +18,7 @@
 */
 #pragma once
 #include "Resource.h"
+#include "IArLive2Engine.h"
 
 // CLiveWin32Dlg ¶Ô»°¿ò
 class CLiveWin32Dlg : public CDialogEx
@@ -50,4 +51,7 @@ public:
 	afx_msg void OnBnClickedBtnPush();
 	afx_msg void OnBnClickedBtnPull();
 	afx_msg void OnBnClickedBtnRtcp();
+
+private:
+	AR::IArLive2Engine*	ar_live_egine_;
 };

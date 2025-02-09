@@ -18,13 +18,14 @@
 */
 #pragma once
 #include "Resource.h"
-#include "RtmpHoster.h"
 #include "DlgVideo.h"
+#include "IArLive2Engine.h"
+#include "IArLivePusher.hpp"
 #define WM_MY_PUSH_MESSAGE (WM_USER + 101)
 
 // DlgVideo 对话框
 class CLiveWin32Dlg;
-class DlgRtmpPush : public CDialog, public RTMPHosterEvent
+class DlgRtmpPush : public CDialog, public AR::ArLivePusherObserver
 {
 	DECLARE_DYNAMIC(DlgRtmpPush)
 
@@ -34,6 +35,8 @@ public:
 
 // 对话框数据
 	enum { IDD = IDD_DIALOG_PUSH };
+
+	void SetEngine(AR::IArLive2Engine*pEngine) { m_pArEngine = pEngine; };
 
 protected:
 	//* For RTMPHosterEvent
@@ -66,5 +69,7 @@ public:
 
 protected:
 	DlgVideo		*m_pDlgVideoMain;
-	RTMPHoster		*m_pAVRtmpstreamer;
+	//RTMPHoster		*m_pAVRtmpstreamer;
+	AR::IArLive2Engine	*m_pArEngine;
+	AR::IArLivePusher	*m_pAVRtmpush;
 };

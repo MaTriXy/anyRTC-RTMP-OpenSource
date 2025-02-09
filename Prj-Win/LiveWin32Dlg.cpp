@@ -66,6 +66,7 @@ END_MESSAGE_MAP()
 
 CLiveWin32Dlg::CLiveWin32Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CLiveWin32Dlg::IDD, pParent)
+	, ar_live_egine_(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -118,6 +119,10 @@ BOOL CLiveWin32Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	//* ShowWindow(SW_MINIMIZE);
+	if (ar_live_egine_ == NULL) {
+		ar_live_egine_ = AR::createArLive2Engine();
+		ar_live_egine_->initialize(NULL);
+	}
 
 	// TODO:  在此添加额外的初始化代码
 	
@@ -128,7 +133,11 @@ BOOL CLiveWin32Dlg::OnInitDialog()
 BOOL CLiveWin32Dlg::DestroyWindow()
 {
 	
-	//_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();  
+	if (ar_live_egine_ != NULL) {
+		ar_live_egine_->release();
+		ar_live_egine_ = NULL;
+	}
 	return CDialog::DestroyWindow();
 }
 
@@ -200,6 +209,7 @@ void CLiveWin32Dlg::OnBnClickedBtnPush()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	DlgRtmpPush dlg;
+	dlg.SetEngine(ar_live_egine_);
 	dlg.DoModal();
 }
 
@@ -208,6 +218,7 @@ void CLiveWin32Dlg::OnBnClickedBtnPull()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	DlgRtmpPull dlg;
+	dlg.SetEngine(ar_live_egine_);
 	dlg.DoModal();
 }
 

@@ -1,18 +1,7 @@
 <resources>
-    <string name="app_name">anyrtmp</string>
-
-    <string name="start_live">推流</string>
-    <string name="watch_live">拉流</string>
-    <string name="str_rtmp">RTMP</string>
-
-    <string name="hint_rtmp_url">输入推流/拉流地址</string>
-    <string name="str_rtmp_success">RTMP 连接成功</string>
-    <string name="str_rtmp_failed">RTMP 连接失败</string>
-    <string name="str_rtmp_status">RTMP 延迟：%1$d 网络：%2$d</string>
-    <string name="str_rtmp_reconnecting">RTMP 重连中(%1$d秒)...</string>
-    <string name="str_rtmp_play_success">RTMP 播放成功</string>
-    <string name="str_rtmp_pull_status">RTMP 缓存区：%1$d 码率：%2$d</string>
-    <string name="version">V0.0.1</string>
-
-    <string name="str_rtmp_company">Powered by Boyuan (Shanghai) Information Technology Co., Ltd.</string>
+    <string name="app_name">LivePlayer</string>
+    <string name="push_desc">采用 WebRTC 底层架构，支持 RTMP/HLS/ \nHTTP-FLV</string>
+    <string name="pull_desc">低功耗直播播放器，支持软硬解切换，横竖切 \n换，低延迟等</string>
+    <string name="video_desc">支持首屏秒开、清晰度无缝切换、码率自适 \n应等多种特性</string>
+    <string name="live_desc">基于 anyRTC，强力打造直播互动连麦 \n各种互动场景</string>
 </resources>

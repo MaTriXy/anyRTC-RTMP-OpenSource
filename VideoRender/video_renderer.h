@@ -12,12 +12,12 @@
 
 #include <stddef.h>
 
-#include "webrtc/media/base/videosinkinterface.h"
-#include "webrtc/media/base/videoframe.h"
+#include "api/video/video_sink_interface.h"
+#include "api/video/video_frame.h"
 
 namespace webrtc {
 
-class VideoRenderer : public rtc::VideoSinkInterface<cricket::VideoFrame> {
+class VideoRenderer : public rtc::VideoSinkInterface<webrtc::VideoFrame> {
  public:
   // Creates a platform-specific renderer if possible, or a null implementation
   // if failing.

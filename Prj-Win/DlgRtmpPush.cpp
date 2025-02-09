@@ -21,13 +21,17 @@
 
 // DlgRtmpPush 对话框
 
+#define PUSH_URL ""
+
 IMPLEMENT_DYNAMIC(DlgRtmpPush, CDialog)
 
 DlgRtmpPush::DlgRtmpPush()
 	: CDialog(DlgRtmpPush::IDD)
-	, m_strUrl(_T(""))
-	, m_pAVRtmpstreamer(NULL)
+	, m_strUrl(_T(PUSH_URL))
+	//, m_pAVRtmpstreamer(NULL)
 	, m_pDlgVideoMain(NULL)
+	, m_pArEngine(NULL)
+	, m_pAVRtmpush(NULL)
 {
 }
 
@@ -94,11 +98,22 @@ BOOL DlgRtmpPush::OnInitDialog()
 BOOL DlgRtmpPush::DestroyWindow()
 {
 	KillTimer(1);
+#if 0
 	if (m_pAVRtmpstreamer) {
 		m_pAVRtmpstreamer->SetVideoCapturer(NULL);
 		m_pAVRtmpstreamer->StopRtmpStream();
 		RTMPHoster::Destory(m_pAVRtmpstreamer);
 		m_pAVRtmpstreamer = NULL;
+	}
+#endif
+	if (m_pAVRtmpush != NULL) {
+		m_pAVRtmpush->stopMicrophone();
+		m_pAVRtmpush->stopCamera();
+		m_pAVRtmpush->setRenderView(NULL);
+
+		m_pAVRtmpush->stopPush();
+		m_pArEngine->releaseArLivePusher(m_pAVRtmpush);
+		m_pAVRtmpush = NULL;
 	}
 
 	if (m_pDlgVideoMain) {
@@ -118,6 +133,16 @@ BOOL DlgRtmpPush::OnEraseBkgnd(CDC* pDC)
 void DlgRtmpPush::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	CDialog::OnLButtonDblClk(nFlags, point);
+
+	static bool gVidPause = false;
+	if (!gVidPause) {
+		m_pAVRtmpush->pauseVideo();
+	}
+	else {
+		m_pAVRtmpush->resumeVideo();
+	}
+
+	gVidPause = !gVidPause;
 }
 
 void DlgRtmpPush::OnTimer(UINT_PTR nIDEvent)
@@ -144,6 +169,34 @@ LRESULT DlgRtmpPush::OnMyMessage(WPARAM wParam, LPARAM lParam)
 void DlgRtmpPush::OnBnClickedBtnPush()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	static bool gPush = false;
+	if (!gPush) {		
+		m_pAVRtmpush = m_pArEngine->createArLivePusher();
+		m_pAVRtmpush->setRenderView(m_pDlgVideoMain->m_hWnd);
+		m_pAVRtmpush->startCamera("");
+		m_pAVRtmpush->startMicrophone();
+		char ss[256];
+		memset(ss, 0, 256);
+		int fnlen = m_strUrl.GetLength();
+		for (int i = 0; i <= fnlen; i++) {
+			ss[i] = m_strUrl.GetAt(i);
+		}
+		m_pAVRtmpush->startPush(ss);
+	}
+	else {
+		if (m_pAVRtmpush != NULL) {
+			m_pAVRtmpush->stopMicrophone();
+			m_pAVRtmpush->stopCamera();
+			m_pAVRtmpush->setRenderView(NULL);
+
+			m_pAVRtmpush->stopPush();
+			m_pArEngine->releaseArLivePusher(m_pAVRtmpush);
+			m_pAVRtmpush = NULL;
+		}
+	}
+	gPush = !gPush;
+	
+#if 0
 	if (m_pAVRtmpstreamer == NULL) {
 		m_pAVRtmpstreamer = RTMPHoster::Create(*this);
 		m_pAVRtmpstreamer->SetVideoCapturer(m_pDlgVideoMain->m_hWnd);
@@ -166,5 +219,6 @@ void DlgRtmpPush::OnBnClickedBtnPush()
 		RTMPHoster::Destory(m_pAVRtmpstreamer);
 		m_pAVRtmpstreamer = NULL;
 	}
+#endif
 }
 

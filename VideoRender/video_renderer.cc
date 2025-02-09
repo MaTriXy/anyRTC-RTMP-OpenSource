@@ -11,12 +11,10 @@
 
 // TODO(pbos): Android renderer
 
-#include "webrtc/typedefs.h"
-
 namespace webrtc {
 
 class NullRenderer : public VideoRenderer {
-	void OnFrame(const cricket::VideoFrame& video_frame) override {}
+	void OnFrame(const webrtc::VideoFrame& video_frame) override {}
 };
 
 VideoRenderer* VideoRenderer::Create(const void* hwnd,

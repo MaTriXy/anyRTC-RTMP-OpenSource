@@ -18,13 +18,14 @@
 */
 #pragma once
 #include "Resource.h"
-#include "RtmpGuester.h"
 #include "DlgVideo.h"
+#include "IArLive2Engine.h"
 #define WM_MY_PULL_MESSAGE (WM_USER + 102)
 
 // DlgVideo 对话框
 class CLiveWin32Dlg;
-class DlgRtmpPull : public CDialog, public RTMPGuesterEvent
+class DlgRtmpPull : public CDialog
+	, public AR::ArLivePlayerObserver
 {
 	DECLARE_DYNAMIC(DlgRtmpPull)
 
@@ -35,12 +36,10 @@ public:
 // 对话框数据
 	enum { IDD = IDD_DIALOG_PULL };
 
+	void SetEngine(AR::IArLive2Engine*pEngine) { m_pArEngine = pEngine; };
+
 public:
-	//* For RTMPCGuesterEvent
-	virtual void OnRtmplayerOK() {};
-	virtual void OnRtmplayerStatus(int cacheTime, int curBitrate) {};
-	virtual void OnRtmplayerCache(int time) {};
-	virtual void OnRtmplayerClosed(int errcode) {};
+
 
 
 protected:
@@ -66,6 +65,7 @@ public:
 
 private:
 	DlgVideo		*m_pDlgVideoMain;
-	RTMPGuester		*m_pAVRtmplayer;
+	AR::IArLive2Engine	*m_pArEngine;
+	AR::IArLivePlayer	*m_pAVRtmplayer;
 	
 };

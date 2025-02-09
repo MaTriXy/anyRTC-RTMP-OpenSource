@@ -1,39 +1,65 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdk 31
 
     defaultConfig {
-        applicationId "org.anyrtc.anyrtmp"
-        minSdkVersion 16
-        targetSdkVersion 23
+        applicationId "io.anyrtc.liveplayer"
+        minSdk 21
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
-        externalNativeBuild {
-            ndkBuild {
-                arguments "NDK_APPLICATION_MK:=../jni/Application.mk"
-                abiFilters "armeabi-v7a", "armeabi"
-            }
-        }
-    }
-    externalNativeBuild {
-        ndkBuild {
-            path '../jni/toolchain/Android.mk'
-        }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    viewBinding {
+        enabled = true
+    }
+    dataBinding {
+        enabled = true
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation project(path: ':liveplayer')
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation("io.coil-kt:coil-gif:1.4.0")
+    implementation("io.coil-kt:coil:1.4.0")
+    implementation 'com.github.LxzBUG:ScreenShare:1.1.6'
+
 }
